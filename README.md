@@ -1,7 +1,5 @@
 # Interactive Heart Animation for Olivia
 
-![Heart Animation Demo](https://img.shields.io/badge/Demo-Interactive%20Heart-ff69b4)
-![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
 
 A beautiful, interactive particle heart animation created with HTML5 Canvas and JavaScript. The particles form a pink heart shape that responds to mouse movement, creating an engaging visual effect.
 
