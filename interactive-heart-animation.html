@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For My Olee 💕</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: #000000;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      cursor: default;
+    }
+    
+    .heart-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100%;
+      position: relative;
+    }
+    
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    
+    .message {
+      z-index: 10;
+      text-align: center;
+      font-family: 'Dancing Script', cursive;
+      font-size: 32px;
+      color: white;
+      text-shadow: 0px 0px 10px rgba(255, 255, 255, 0.5);
+      pointer-events: none;
+    }
+    
+    .heart-emoji {
+      color: #ff4444;
+      font-size: 38px;
+      margin: 0 5px;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+  <div class="heart-container">
+    <canvas id="canvas"></canvas>
+    <div class="message">
+      Love <span class="heart-emoji">❤️</span> You, Olee!
+    </div>
+  </div>
+
+  <script>
+    // Setup the canvas
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    // Track mouse position
+    let mouse = {
+      x: undefined,
+      y: undefined,
+      radius: 80
+    };
+    
+    window.addEventListener('mousemove', function(event) {
+      mouse.x = event.x;
+      mouse.y = event.y;
+    });
+    
+    // Heart shape points
+    const particles = [];
+    const particleCount = 5000;
+    
+    // Function to create heart shape coordinates
+    function heartShape(t, scale) {
+      scale = scale || 10;
+      return {
+        x: 16 * Math.pow(Math.sin(t), 3) * scale,
+        y: -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t)) * scale
+      };
+    }
+    
+    // Create particles in heart shape
+    for (let i = 0; i < particleCount; i++) {
+      let t = Math.random() * Math.PI * 2;
+      let scale = 10 + Math.random() * 2; // Vary the size a bit
+      let pos = heartShape(t, scale);
+      let x = canvas.width / 2 + pos.x;
+      let y = canvas.height / 2 + pos.y;
+      
+      // Create a ring effect by only using certain radii
+      if (Math.random() > 0.2) {
+        // Add some randomness to particle position for a fuzzy look
+        x += (Math.random() - 0.5) * 10;
+        y += (Math.random() - 0.5) * 10;
+        
+        const size = Math.random() * 2 + 1;
+        // Bright pink color
+        const color = `rgba(255, ${Math.floor(Math.random() * 50)}, ${Math.floor(Math.random() * 150)}, ${Math.random() * 0.5 + 0.5})`;
+        
+        particles.push({
+          x: x,
+          y: y,
+          size: size,
+          color: color,
+          baseX: x,
+          baseY: y,
+          density: (Math.random() * 30) + 5
+        });
+      }
+    }
+    
+    // Animation function
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw particles
+      for (let i = 0; i < particles.length; i++) {
+        let p = particles[i];
+        
+        // Calculate distance between mouse and particle
+        let dx = mouse.x - p.x;
+        let dy = mouse.y - p.y;
+        let distance = Math.sqrt(dx * dx + dy * dy);
+        let forceDirectionX = dx / distance;
+        let forceDirectionY = dy / distance;
+        
+        // Max distance, past that the force will be 0
+        const maxDistance = mouse.radius;
+        let force = (maxDistance - distance) / maxDistance;
+        
+        // If we're close enough, calculate a push force
+        if (distance < maxDistance) {
+          let pushFactor = force * p.density;
+          p.x -= forceDirectionX * pushFactor;
+          p.y -= forceDirectionY * pushFactor;
+        } else {
+          // Return to original position
+          if (p.x !== p.baseX) {
+            let dx = p.x - p.baseX;
+            p.x -= dx / 10;
+          }
+          if (p.y !== p.baseY) {
+            let dy = p.y - p.baseY;
+            p.y -= dy / 10;
+          }
+        }
+        
+        // Draw particle
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+      }
+      
+      requestAnimationFrame(animate);
+    }
+    
+    // Start animation
+    animate();
+    
+    // Resize canvas when window size changes
+    window.addEventListener('resize', function() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
+      // Recalculate particle positions
+      for (let i = 0; i < particles.length; i++) {
+        let t = Math.random() * Math.PI * 2;
+        let scale = 10 + Math.random() * 2;
+        let pos = heartShape(t, scale);
+        
+        particles[i].baseX = canvas.width / 2 + pos.x;
+        particles[i].baseY = canvas.height / 2 + pos.y;
+        particles[i].x = particles[i].baseX;
+        particles[i].y = particles[i].baseY;
+      }
+    });
+  </script>
+</body>
+</html>
