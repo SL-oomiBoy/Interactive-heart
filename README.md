@@ -24,12 +24,12 @@ Visit the [live demo](https://SL-oomiBoy.github.io/Interactive-heart/) to see th
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-github-username/heart-animation-for-olivia.git
+   git clone https://github.com/SL-oomiBoy/Interactive-heart.git
    ```
 
 2. Navigate to the project directory:
    ```bash
-   cd heart-animation-for-olivia
+   cd Interactive-heart
    ```
 
 3. Open `index.html` in your web browser to view the animation.
