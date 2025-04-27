@@ -13,7 +13,7 @@ A beautiful, interactive particle heart animation created with HTML5 Canvas and 
 
 ## 🚀 Demo
 
-Visit the [live demo](https://SL-oomiBoy.github.io/heart-animation-for-olivia/) to see the animation in action.
+Visit the [live demo](https://SL-oomiBoy.github.io/Interactive-heart/) to see the animation in action.
 
 ## 📷 Screenshot
 
